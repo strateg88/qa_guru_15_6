@@ -5,43 +5,48 @@ import com.demoqa.pages.RegistrationFormPage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import static com.demoqa.testData.UserInfo.*;
+
 public class RegistrationFormWithObjectsTests {
     RegistrationFormPage registrationFormPage = new RegistrationFormPage();
     @BeforeAll
     static void setUp() {
         Configuration.baseUrl = "https://demoqa.com";
-        Configuration.browserSize = "1920x1080";
         Configuration.holdBrowserOpen = true;
+        Configuration.browserSize = "1920x1080";
     }
 
     @Test
-    void fillFormTest () {
-
+    void fillFormTest() {
         registrationFormPage.openPage()
-                .setFirstName("Dude")
-                .setLastName("Random")
-                .setEmail("random@dude.ai")
-                .setGender("Female")
-                .setPhone("8800555353")
-                .setDateOfBirth("28", "September", "1991")
-                .setSubjects("English")
-                .setHobbies("Reading")
-                .uploadPic("888.JPG")
-                .setAddress("textExample", "Haryana", "Karnal")
-                .clickSubmit();
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setEmail(email)
+                .setGender(gender)
+                .setNumber(number)
+                .setBirthDate(day ,month, year)
+                .setSubject(subject)
+                .setHobby(hobby)
+                .uploadFile(path)
+                .setAddress(address)
+                .setStateAndCity(state, city)
+                .submit();
 
-        registrationFormPage.checkResultsTableVisible()
-                .checkResult("Student Name", "Dude Random")
-                .checkResult("Student Email", "random@dude.ai")
-                .checkResult("Gender", "Female")
-                .checkResult("Mobile", "8800555353")
-                .checkResult("Date of Birth", "28 September,1991")
-                .checkResult("Subjects", "English")
-                .checkResult("Hobbies", "Reading")
-                .checkResult("Picture", "888.JPG")
-                .checkResult("Address", "textExample")
-                .checkResult("State and City", "Haryana Karnal");
-
-
+        registrationFormPage.checkResultTableVisibility()
+                .checkResultTableData(firstName, lastName, email, number, date, gender,
+                        pic, address, subject, hobby, state, city);
     }
+
+    @Test
+    void fillFormWithMinimumTest() {
+        registrationFormPage.openPage()
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setGender(gender)
+                .setNumber(number)
+                .submit();
+        registrationFormPage.checkResultTableVisibility()
+                .checkResultTableData(firstName, lastName, number, gender);
+    }
+
 }
